@@ -1,0 +1,34 @@
+name: Build and deploy Weather API
+
+on:
+  push:
+    paths:
+      - 'teams/TeamWeather/tamriel-weather-api/**/*.py'    
+      - '.github/workflows/weatherapi.yml'
+  workflow_dispatch:    
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v4
+          
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: 'Build and push image'
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build tamriel weather api
+        run: |
+          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/tamriel-weather-api:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/tamriel-weather-api:${{ github.sha }}
+        working-directory: 
+          teams/TeamWeather/tamriel-weather-api
