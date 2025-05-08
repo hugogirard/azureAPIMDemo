@@ -59,3 +59,26 @@ module apim 'br/public:avm/res/api-management/service:0.9.1' = {
     sku: 'Premium'
   }
 }
+
+// Creating the VNET and subnet for the Container App Environment
+module virtualNetwork 'br/public:avm/res/network/virtual-network:0.6.1' = {
+  scope: rgSharedService
+  name: 'vnet-shared-services'
+  params: {
+    // Required parameters
+    addressPrefixes: [
+      '10.0.0.0/16'
+    ]
+    subnets: [
+      {
+        name: 'snet-aca'
+        addressPrefix: '10.1.0.0/24'
+      }
+    ]
+    name: 'vnet-shared-services'
+    // Non-required parameters
+    location: location
+  }
+}
+
+// Creating Azure Container App Environment
