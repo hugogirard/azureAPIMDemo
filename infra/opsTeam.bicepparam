@@ -9,3 +9,5 @@ param publisherEmail = ''
 param teamPizzaRgName = 'rg-pizza-api'
 
 param teamWeatherRgName = 'rg-weather-api'
+
+param apimSku = 'Developer'
