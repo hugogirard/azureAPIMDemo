@@ -19,11 +19,12 @@ resource rg 'Microsoft.Resources/resourceGroups@2025-03-01' = {
 var suffix = uniqueString(rg.id)
 
 // The Azure Container Registry
-module containerRegistry 'br/public:avm/res/container-registry/registry:0.9.1' = {
+module acr 'modules/container/registry.bicep' = {
   scope: rg
   params: {
-    name: 'acr${suffix}'
-    acrSku: 'Premium'
-    acrAdminUserEnabled: true
+    location: location
+    suffix: suffix
   }
 }
+
+output acrResourceName string = acr.outputs.resourceName
