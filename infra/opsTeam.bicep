@@ -69,3 +69,16 @@ module devSharedServices 'modules/sharedServices.bicep' = {
     suffix: uniqueString(rgSharedServiceDev.id)
   }
 }
+
+/* Creation PROD environment */
+
+module ProdSharedServices 'modules/sharedServices.bicep' = {
+  scope: rgSharedServiceProd
+  params: {
+    location: location
+    apimSku: apimSku
+    environment: 'prod'
+    publisherEmail: publisherEmail
+    suffix: uniqueString(rgSharedServiceProd.id)
+  }
+}
