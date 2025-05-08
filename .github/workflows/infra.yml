@@ -39,4 +39,4 @@ jobs:
           region: ${{ env.REGION }}
           deploymentName:  ${{ github.run_id }}
           template: ./infra/opsTeam.bicep
-          parameters: ./infra/opsTeam.bicepparam
+          parameters: ./infra/opsTeam.bicepparam publisherEmail=${{ secrets.PUBLISHER_EMAIL }}
