@@ -81,4 +81,14 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.6.1' = {
   }
 }
 
+// Workspace for application insights
+module workspace 'br/public:avm/res/operational-insights/workspace:0.11.2' = {
+  scope: rgSharedService
+  params: {
+    name: 'log-${suffix}'
+    dailyQuotaGb: 2
+    dataRetention: 10
+  }
+}
+
 // Creating Azure Container App Environment
