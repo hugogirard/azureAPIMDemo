@@ -25,7 +25,5 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.9.1' =
     name: 'acr${suffix}'
     acrSku: 'Premium'
     acrAdminUserEnabled: true
-    publicNetworkAccess: 'Enabled'
-    exportPolicyStatus: 'disabled'
   }
 }
