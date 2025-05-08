@@ -1,0 +1,144 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Contoso Yummy Pizza",
+        "description": "An API to order the best pizza in Town.",
+        "version": "1.0"
+    },
+    "paths": {
+        "/pizzas": {
+            "get": {
+                "summary": "Get Pizzas",
+                "description": "Get the list of all available pizzas with toppings, sizes, and prices.",
+                "operationId": "get_pizzas_pizzas_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "additionalProperties": true,
+                                        "type": "object"
+                                    },
+                                    "type": "array",
+                                    "title": "Response Get Pizzas Pizzas Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "post": {
+                "summary": "Order Pizza",
+                "description": "Place an order for a pizza.",
+                "operationId": "order_pizza_order_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PizzaOrder"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "PizzaOrder": {
+                "properties": {
+                    "pizza_id": {
+                        "type": "integer",
+                        "title": "Pizza Id"
+                    },
+                    "size": {
+                        "type": "string",
+                        "title": "Size"
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "title": "Quantity"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "pizza_id",
+                    "size",
+                    "quantity"
+                ],
+                "title": "PizzaOrder"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}
