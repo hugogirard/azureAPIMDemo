@@ -88,6 +88,17 @@ module workspace 'br/public:avm/res/operational-insights/workspace:0.11.2' = {
     name: 'log-${suffix}'
     dailyQuotaGb: 2
     dataRetention: 10
+    skuName: 'PerGB2018'
+  }
+}
+
+module appinsights 'br/public:avm/res/insights/component:0.6.0' = {
+  scope: rgSharedService
+  name: 'appinsights'
+  params: {
+    name: 'api-${suffix}'
+    workspaceResourceId: workspace.outputs.resourceId
+    location: location
   }
 }
 
