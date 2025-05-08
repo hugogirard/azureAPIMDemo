@@ -72,7 +72,7 @@ module virtualNetwork 'br/public:avm/res/network/virtual-network:0.6.1' = {
     subnets: [
       {
         name: 'snet-aca'
-        addressPrefix: '10.1.0.0/24'
+        addressPrefix: '10.0.1.0/24'
       }
     ]
     name: 'vnet-shared-services'
