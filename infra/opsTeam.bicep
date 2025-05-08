@@ -87,7 +87,6 @@ module workspace 'br/public:avm/res/operational-insights/workspace:0.11.2' = {
   params: {
     name: 'log-${suffix}'
     dailyQuotaGb: 2
-    dataRetention: 10
     skuName: 'PerGB2018'
   }
 }
