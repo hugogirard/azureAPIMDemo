@@ -27,80 +27,45 @@ param publisherEmail string
 @description('APIM SKU')
 param apimSku string
 
-resource rgSharedService 'Microsoft.Resources/resourceGroups@2025-03-01' = {
-  name: sharedRgName
+resource rgSharedServiceDev 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${sharedRgName}-dev'
   location: location
 }
 
-resource rgteamWeather 'Microsoft.Resources/resourceGroups@2025-03-01' = {
-  name: teamWeatherRgName
+resource rgteamWeatherDev 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${teamWeatherRgName}-dev'
   location: location
 }
 
-resource rgteamPizza 'Microsoft.Resources/resourceGroups@2025-03-01' = {
-  name: teamPizzaRgName
+resource rgteamPizzaDev 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${teamPizzaRgName}-dev'
   location: location
 }
 
-var suffix = uniqueString(rgSharedService.id)
-
-// The Azure Container Registry
-module containerRegistry 'br/public:avm/res/container-registry/registry:0.9.1' = {
-  scope: rgSharedService
-  params: {
-    name: 'acr${suffix}'
-    acrSku: 'Premium'
-    acrAdminUserEnabled: true
-    publicNetworkAccess: 'Enabled'
-    exportPolicyStatus: 'enabled'
-  }
+resource rgSharedServiceProd 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${sharedRgName}-prod'
+  location: location
 }
 
-module apim 'br/public:avm/res/api-management/service:0.9.1' = {
-  scope: rgSharedService
-  name: 'apim'
-  params: {
-    name: 'apigw-${suffix}'
-    publisherEmail: publisherEmail
-    publisherName: 'Contoso'
-    sku: apimSku
-  }
+resource rgteamWeatherProd 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${teamWeatherRgName}-prod'
+  location: location
 }
 
-// Workspace for application insights
-module workspace 'br/public:avm/res/operational-insights/workspace:0.11.2' = {
-  scope: rgSharedService
-  params: {
-    name: 'log-${suffix}'
-    dailyQuotaGb: 2
-    skuName: 'PerGB2018'
-  }
+resource rgteamPizzaProd 'Microsoft.Resources/resourceGroups@2025-03-01' = {
+  name: '${teamPizzaRgName}-prod'
+  location: location
 }
 
-module appinsights 'br/public:avm/res/insights/component:0.6.0' = {
-  scope: rgSharedService
-  name: 'appinsights'
+/* Creation DEV environment */
+
+module devSharedServices 'modules/sharedServices.bicep' = {
+  scope: rgSharedServiceDev
   params: {
-    name: 'api-${suffix}'
-    workspaceResourceId: workspace.outputs.resourceId
     location: location
+    apimSku: apimSku
+    environment: 'dev'
+    publisherEmail: publisherEmail
+    suffix: uniqueString(rgSharedServiceDev.id)
   }
 }
-
-var aspNames = [
-  'asp-weather-api-${suffix}'
-  'asp-pizza-api-${suffix}'
-]
-
-// Creating Two App Service Plan in the shared ressource group
-module serverfarm 'br/public:avm/res/web/serverfarm:0.4.1' = [
-  for name in aspNames: {
-    scope: rgSharedService
-    name: name
-    params: {
-      name: name
-      kind: 'linux'
-      skuName: 'P1V3'
-    }
-  }
-]
