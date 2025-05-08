@@ -26,5 +26,6 @@ module containerRegistry 'br/public:avm/res/container-registry/registry:0.9.1' =
     acrSku: 'Premium'
     acrAdminUserEnabled: true
     publicNetworkAccess: 'Enabled'
+    exportPolicyStatus: 'disabled'
   }
 }
